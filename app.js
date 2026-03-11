@@ -10,7 +10,6 @@ import contactRoutes from "./routes/contactRoutes.js";
 
 const app = express();
 
-// ES module path fix
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -21,24 +20,17 @@ app.use(express.json());
 app.use("/api/products", productRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/upload", uploadRoutes);
-
 app.use("/api/contact", contactRoutes);
-// Existing uploads folder (KEEP)
-app.use("/uploads", express.static("uploads"));
 
-/* ✅ ADD THESE – FIX IMAGE NOT SHOWING ISSUE */
-app.use(
-  "/tiles",
-  express.static(path.join(__dirname, "../frontend/public/tiles"))
-);
-app.use(
-  "/hangover",
-  express.static(path.join(__dirname, "../frontend/public/hangover"))
-);
-app.use(
-  "/preview",
-  express.static(path.join(__dirname, "../frontend/public/preview"))
-);
+// ✅ STATIC FOLDERS
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/mask", express.static(path.join(__dirname, "mask")));
+app.use("/rooms", express.static(path.join(__dirname, "rooms")));
+
+// OPTIONAL if stored inside uploads
+app.use("/tiles", express.static(path.join(__dirname, "uploads/tiles")));
+app.use("/preview", express.static(path.join(__dirname, "uploads/preview")));
+app.use("/hangover", express.static(path.join(__dirname, "uploads/hangover")));
 
 app.get("/", (req, res) => {
   res.send("Backend API is running");
